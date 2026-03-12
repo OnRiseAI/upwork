@@ -112,6 +112,9 @@ export default function VerticalDemo({ verticalKey, nameParam }) {
     ? vertical.subVerticals[selectedSubVertical]
     : vertical;
 
+  const defaultName = nameParam || (activeConfig ? activeConfig.defaultName : "");
+  const [businessName, setBusinessName] = useState(defaultName);
+
   useEffect(() => {
     const name = nameParam || (activeConfig ? activeConfig.defaultName : "");
     setBusinessName(name);
