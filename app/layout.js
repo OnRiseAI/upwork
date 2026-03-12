@@ -1,4 +1,5 @@
 import "./globals.css";
+import SharedLayout from "./components/SharedLayout";
 
 export const metadata = {
   title: "We Pick Up The Phone — AI Voice Receptionist",
@@ -46,7 +47,9 @@ export default function RootLayout({ children }) {
         />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
       </head>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <SharedLayout>{children}</SharedLayout>
+      </body>
     </html>
   );
 }
