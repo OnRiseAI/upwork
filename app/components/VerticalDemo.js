@@ -308,7 +308,7 @@ export default function VerticalDemo({ verticalKey, nameParam }) {
       {/* Call Widget */}
       <motion.div className="lg:col-span-7 lg:sticky lg:top-24" variants={slideInRight}>
         <CallWidget
-          agentId={selectedVoice ? selectedVoice.agentId : getAgentId(verticalKey, selectedSubVertical)}
+          agentId={selectedSubVertical ? getAgentId(verticalKey, selectedSubVertical) : (selectedVoice ? selectedVoice.agentId : getAgentId(verticalKey, null))}
           businessName={businessName}
           vertical={verticalKey}
           title={businessName}

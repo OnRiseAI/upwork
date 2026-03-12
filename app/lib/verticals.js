@@ -31,6 +31,12 @@ export const SUB_AGENT_MAP = {
   electrical: "agent_49685b634161d09141caf14842",
   landscaping: "agent_b78140ec70121dfca76302c335",
   "pest-control": "agent_6503ed17e85790212cc80abefa",
+  "qc-plomberie": "agent_bce32f3710c7937aa9690d8e2a",
+  "qc-electricite": "agent_33ee2674c4e5919cfbe9be6d95",
+  "qc-cvc": "agent_4b6fbff06a2a3bec1a30913ecc",
+  "qc-toiture": "agent_3b8df2b01a98611dc93d27fb3f",
+  "qc-amenagement": "agent_6cc4743f97ae9f422e4608d185",
+  "qc-extermination": "agent_9f7749d9831814abf3db9bcbb5",
 };
 
 // Fallback agent (generic demo)
@@ -347,6 +353,110 @@ export const VERTICALS = {
       "Avez-vous de la disponibilité cette semaine?",
     ],
     hasVoicePicker: true,
+    subVerticals: {
+      "qc-plomberie": {
+        label: "Plomberie",
+        defaultName: "Plomberie Pro Québec",
+        description: "Réceptionniste IA pour plombiers — gère les appels d'urgence, planifie les débouchages et réparations.",
+        capabilities: [
+          "Gérer les urgences plomberie",
+          "Planifier débouchage et réparations",
+          "Donner des estimations de prix",
+          "Planifier installations chauffe-eau",
+        ],
+        sampleQuestions: [
+          "J'ai un tuyau qui a éclaté, quelqu'un peut venir?",
+          "Combien ça coûte un débouchage de drain?",
+          "Mon chauffe-eau ne fonctionne plus",
+          "Offrez-vous des estimations gratuites?",
+        ],
+      },
+      "qc-electricite": {
+        label: "Électricité",
+        defaultName: "Électricité Pro Québec",
+        description: "Réceptionniste IA pour électriciens — planifie les mises à niveau, gère les urgences et prend les rendez-vous.",
+        capabilities: [
+          "Planifier inspections électriques",
+          "Gérer les pannes d'urgence",
+          "Planifier mises à niveau de panneau",
+          "Donner des soumissions d'installation",
+        ],
+        sampleQuestions: [
+          "J'ai besoin d'un électricien pour changer mon panneau",
+          "Mon courant saute tout le temps",
+          "Combien ça coûte pour câbler un ajout?",
+          "Installez-vous des bornes de recharge?",
+        ],
+      },
+      "qc-cvc": {
+        label: "Chauffage / Clim",
+        defaultName: "Confort Air Québec",
+        description: "Réceptionniste IA pour CVC — planifie les installations, dispatche les réparations d'urgence et capture les leads.",
+        capabilities: [
+          "Planifier rendez-vous climatisation et chauffage",
+          "Dispatcher les réparations d'urgence",
+          "Donner des soumissions d'entretien saisonnier",
+          "Prendre les coordonnées des nouveaux clients",
+        ],
+        sampleQuestions: [
+          "Ma climatisation a lâché, quelqu'un peut venir aujourd'hui?",
+          "Combien coûte une nouvelle fournaise?",
+          "J'ai besoin de faire nettoyer mes conduits",
+          "Offrez-vous des plans d'entretien?",
+        ],
+      },
+      "qc-toiture": {
+        label: "Toiture",
+        defaultName: "Toiture Pro Québec",
+        description: "Réceptionniste IA pour couvreurs — planifie les inspections, gère les dommages de tempête et capture les leads.",
+        capabilities: [
+          "Planifier inspections de toiture",
+          "Gérer les demandes de dommages de tempête",
+          "Donner des soumissions réparation et remplacement",
+          "Capturer les détails d'assurance",
+        ],
+        sampleQuestions: [
+          "J'ai besoin d'une inspection après la tempête",
+          "Combien coûte un remplacement de toiture?",
+          "J'ai une fuite dans mon plafond",
+          "Travaillez-vous avec les assurances?",
+        ],
+      },
+      "qc-amenagement": {
+        label: "Aménagement Paysager",
+        defaultName: "Paysagement Pro Québec",
+        description: "Réceptionniste IA pour paysagistes — planifie l'entretien de pelouse, les projets saisonniers et capture les nouveaux clients.",
+        capabilities: [
+          "Planifier tonte et entretien de pelouse",
+          "Planifier consultations d'aménagement",
+          "Gérer les demandes de nettoyage saisonnier",
+          "Donner des estimations de projet",
+        ],
+        sampleQuestions: [
+          "J'ai besoin d'un service de tonte hebdomadaire",
+          "Pouvez-vous designer un nouveau patio?",
+          "Combien coûte le nettoyage de printemps?",
+          "Offrez-vous le déneigement en hiver?",
+        ],
+      },
+      "qc-extermination": {
+        label: "Extermination",
+        defaultName: "Extermination Pro Québec",
+        description: "Réceptionniste IA pour exterminateurs — planifie les traitements, gère les infestations urgentes et les plans récurrents.",
+        capabilities: [
+          "Planifier traitements antiparasitaires",
+          "Gérer les appels d'infestation urgente",
+          "Planifier plans de prévention récurrents",
+          "Répondre aux questions d'identification",
+        ],
+        sampleQuestions: [
+          "J'ai trouvé des termites dans mon sous-sol",
+          "Combien coûte un traitement général?",
+          "Offrez-vous des plans de prévention mensuels?",
+          "J'ai un nid de guêpes près de ma porte",
+        ],
+      },
+    },
   },
   hotel: {
     label: "Hotel & Hospitality",
