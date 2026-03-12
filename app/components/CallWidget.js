@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import AudioVisualizer from "./AudioVisualizer";
-import Penny from "./Penny";
 
 const CREATE_CALL_TIMEOUT_MS = 10000;
 const retellClientModulePromise = import("retell-client-js-sdk");
@@ -42,10 +41,11 @@ function MicOffIcon({ className }) {
   );
 }
 
-function ArrowRightIcon({ className }) {
+function CheckCircleIcon({ className }) {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10" />
+      <polyline points="9 12 11.5 14.5 15.5 10" />
     </svg>
   );
 }
@@ -114,7 +114,7 @@ export default function CallWidget({ agentId, businessName, vertical, title, des
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         stream.getTracks().forEach((track) => track.stop());
       } catch {
-        setError("Microphone access denied. Please allow microphone access in your browser.");
+        setError("Microphone access denied. Please allow mic access in your browser.");
         setCallState("idle");
         return;
       }
@@ -173,7 +173,7 @@ export default function CallWidget({ agentId, businessName, vertical, title, des
     } catch (err) {
       if (!isMountedRef.current) return;
       const isAbortError = err?.name === "AbortError";
-      setError(isAbortError ? "Connection timed out. Please try again." : "Unable to start call. Please try again.");
+      setError(isAbortError ? "Connection timed out." : "Unable to start call.");
       setCallState("idle");
       setIsMuted(false);
       stopAndResetClient();
@@ -209,27 +209,27 @@ export default function CallWidget({ agentId, businessName, vertical, title, des
   }, []);
 
   return (
-    <div className="bg-white rounded-2xl border border-[#E5E7EB] overflow-hidden flex flex-col h-full transition-all duration-300 hover:border-[#0D9488]/20">
-      {/* Header */}
-      <div className="px-5 py-3.5 border-b border-[#F3F4F6] flex items-center justify-between">
+    <div className="bg-[#0E0E12] rounded-2xl border border-[#1A1A1F] overflow-hidden flex flex-col h-full transition-all duration-300 hover:border-[#222228]">
+      {/* Header bar */}
+      <div className="px-5 py-3 border-b border-[#141418] flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <div className={`w-2 h-2 rounded-full transition-all duration-500 ${
+          <div className={`w-[6px] h-[6px] rounded-full transition-all duration-500 ${
             callState === "active"
-              ? "bg-emerald-500"
+              ? "bg-[#2DD4BF] shadow-[0_0_8px_rgba(45,212,191,0.5)]"
               : callState === "connecting"
-              ? "bg-[#0D9488] animate-pulse"
-              : "bg-[#D1D5DB]"
-          }`} />
-          <span className="font-body text-[13px] font-medium text-[#6B7280]">
-            {callState === "idle" && "Ready to call"}
-            {callState === "connecting" && "Connecting..."}
-            {callState === "active" && `Live \u00B7 ${formatDuration(callDuration)}`}
-            {callState === "ended" && `Ended \u00B7 ${formatDuration(callDuration)}`}
+              ? "bg-[#2DD4BF]"
+              : "bg-[#333338]"
+          }`} style={callState === "connecting" ? { animation: "pulse-dot 1.2s ease-in-out infinite" } : undefined} />
+          <span className="text-[12px] font-semibold text-[#555] tracking-wide">
+            {callState === "idle" && "Ready"}
+            {callState === "connecting" && "Connecting\u2026"}
+            {callState === "active" && formatDuration(callDuration)}
+            {callState === "ended" && formatDuration(callDuration)}
           </span>
         </div>
         {callState === "active" && (
-          <button onClick={toggleMute} className="p-2 rounded-lg hover:bg-[#F3F4F6] transition-colors" aria-label={isMuted ? "Unmute" : "Mute"}>
-            {isMuted ? <MicOffIcon className="w-4 h-4 text-red-500" /> : <MicIcon className="w-4 h-4 text-[#9CA3AF]" />}
+          <button onClick={toggleMute} className="p-1.5 rounded-lg hover:bg-[#1A1A1F] transition-colors" aria-label={isMuted ? "Unmute" : "Mute"}>
+            {isMuted ? <MicOffIcon className="w-4 h-4 text-red-400" /> : <MicIcon className="w-4 h-4 text-[#555]" />}
           </button>
         )}
       </div>
@@ -239,30 +239,37 @@ export default function CallWidget({ agentId, businessName, vertical, title, des
 
         {/* ── IDLE ── */}
         {callState === "idle" && (
-          <div className="text-center space-y-6 animate-scale-in">
-            <div className="flex justify-center">
-              <Penny pose="talking" size={120} />
+          <div className="text-center space-y-8 animate-scale-in">
+            {/* Phone icon with glow rings */}
+            <div className="relative flex items-center justify-center mx-auto w-28 h-28">
+              <div className="absolute inset-0 rounded-full bg-[#2DD4BF]/[0.06]" style={{ animation: "ring-pulse 3s ease-out infinite" }} />
+              <div className="absolute inset-0 rounded-full bg-[#2DD4BF]/[0.06]" style={{ animation: "ring-pulse 3s ease-out infinite 1.5s" }} />
+              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#2DD4BF]/10 to-[#0D9488]/5 border border-[#2DD4BF]/15 flex items-center justify-center relative">
+                <PhoneIcon className="w-7 h-7 text-[#2DD4BF]" />
+              </div>
             </div>
+
             <div className="space-y-2">
-              <h3 className="font-body text-lg font-medium text-[#1A1A1A]">{title}</h3>
-              <p className="font-body text-[13px] text-[#9CA3AF] max-w-[280px] mx-auto leading-relaxed">{description}</p>
+              <h3 className="text-[18px] font-bold text-white">{title}</h3>
+              <p className="text-[13px] text-[#6B6B76] max-w-[280px] mx-auto leading-relaxed font-medium">{description}</p>
             </div>
+
             <button
               onClick={startCall}
-              className="group px-7 py-3.5 rounded-xl bg-[#0D9488] text-white font-body font-medium text-sm hover:bg-[#0F766E] transition-colors active:scale-[0.98]"
+              className="group px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#2DD4BF] to-[#0D9488] text-[#07070A] font-bold text-[14px] hover:shadow-[0_0_30px_rgba(45,212,191,0.2)] transition-all duration-300 active:scale-[0.97]"
             >
               <span className="flex items-center gap-2.5">
                 <PhoneIcon className="w-4 h-4" />
                 Start Live Call
-                <ArrowRightIcon className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
               </span>
             </button>
+
             {sampleQuestions.length > 0 && (
-              <div className="pt-1 grid grid-cols-2 gap-2 max-w-[300px] mx-auto">
-                {sampleQuestions.slice(0, 4).map((q, i) => (
-                  <div key={i} className="px-2.5 py-1.5 rounded-lg border border-[#F3F4F6] bg-[#FAFAF9] text-[10px] text-[#9CA3AF] text-center italic">
+              <div className="pt-1 space-y-1.5 max-w-[280px] mx-auto">
+                {sampleQuestions.slice(0, 3).map((q, i) => (
+                  <p key={i} className="text-[11px] text-[#333] italic font-medium text-center">
                     &ldquo;{q}&rdquo;
-                  </div>
+                  </p>
                 ))}
               </div>
             )}
@@ -272,37 +279,32 @@ export default function CallWidget({ agentId, businessName, vertical, title, des
         {/* ── CONNECTING ── */}
         {callState === "connecting" && (
           <div className="text-center space-y-6 animate-fade-in">
-            <div className="flex justify-center">
-              <Penny pose="thinking" size={120} />
+            <div className="w-6 h-6 border-2 border-[#1A1A1F] border-t-[#2DD4BF] rounded-full mx-auto" style={{ animation: "spin 0.8s linear infinite" }} />
+            <div className="space-y-1.5">
+              <p className="text-[16px] font-bold text-white">Connecting</p>
+              <p className="text-[13px] text-[#555] font-medium">Setting up secure voice channel</p>
             </div>
-            <div className="space-y-2">
-              <p className="font-body text-base font-medium text-[#1A1A1A]">Connecting...</p>
-              <p className="font-body text-[13px] text-[#9CA3AF]">Setting up secure voice channel</p>
-            </div>
-            <div className="w-6 h-6 border-2 border-[#E5E7EB] border-t-[#0D9488] rounded-full mx-auto" style={{ animation: "spin 0.8s linear infinite" }} />
           </div>
         )}
 
         {/* ── ACTIVE ── */}
         {callState === "active" && (
           <div className="w-full space-y-6 animate-fade-in">
-            <div className="flex flex-col items-center gap-3">
-              <div className={`relative transition-all duration-500 ${isAgentTalking ? "scale-105" : "scale-100"}`}>
-                <Penny pose="talking" size={100} />
-              </div>
+            <div className="flex flex-col items-center gap-2">
               <AudioVisualizer isAgentTalking={isAgentTalking} />
-              <p className="font-body text-[11px] font-medium tracking-wider uppercase text-[#9CA3AF]">
-                {isAgentTalking ? "Penny is speaking" : "Listening..."}
+              <p className="text-[11px] font-bold tracking-[0.1em] uppercase text-[#555]">
+                {isAgentTalking ? "Speaking" : "Listening"}
               </p>
             </div>
+
             {transcript.length > 0 && (
-              <div className="bg-[#FAFAF9] rounded-xl border border-[#F3F4F6] max-h-[180px] overflow-y-auto transcript-scroll p-4 space-y-3 mx-2">
+              <div className="bg-[#0A0A0D] rounded-xl border border-[#141418] max-h-[200px] overflow-y-auto transcript-scroll p-4 space-y-2.5 mx-2">
                 {transcript.map((entry, i) => (
                   <div key={i} className={`flex ${entry.role === "agent" ? "justify-start" : "justify-end"}`}>
-                    <div className={`max-w-[85%] rounded-xl px-3.5 py-2.5 text-xs leading-relaxed ${
+                    <div className={`max-w-[85%] rounded-lg px-3.5 py-2.5 text-[12px] leading-relaxed font-medium ${
                       entry.role === "agent"
-                        ? "bg-[#F0FDFA] text-[#1A1A1A] border border-[#CCFBF1]"
-                        : "bg-white text-[#4B5563] border border-[#E5E7EB]"
+                        ? "bg-[#2DD4BF]/[0.08] text-[#D0D0D8] border border-[#2DD4BF]/10"
+                        : "bg-[#141418] text-[#A0A0AB] border border-[#1A1A1F]"
                     }`}>
                       {entry.content}
                     </div>
@@ -311,11 +313,12 @@ export default function CallWidget({ agentId, businessName, vertical, title, des
                 <div ref={transcriptEndRef} />
               </div>
             )}
+
             <div className="flex justify-center pt-2">
-              <button onClick={endCall} className="px-7 py-3 rounded-xl bg-red-50 border border-red-200 text-red-600 font-body font-medium text-sm hover:bg-red-100 transition-colors active:scale-[0.97]">
+              <button onClick={endCall} className="px-6 py-2.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 font-bold text-[13px] hover:bg-red-500/15 transition-colors active:scale-[0.97]">
                 <span className="flex items-center gap-2">
                   <PhoneOffIcon className="w-4 h-4" />
-                  End Conversation
+                  End Call
                 </span>
               </button>
             </div>
@@ -324,21 +327,24 @@ export default function CallWidget({ agentId, businessName, vertical, title, des
 
         {/* ── ENDED ── */}
         {callState === "ended" && (
-          <div className="text-center space-y-6 animate-scale-in">
-            <div className="flex justify-center">
-              <Penny pose="thumbsUp" size={120} />
-            </div>
+          <div className="text-center space-y-8 animate-scale-in">
+            <CheckCircleIcon className="w-14 h-14 text-[#2DD4BF] mx-auto" />
+
             <div className="space-y-2">
-              <h3 className="font-body text-xl font-medium text-[#1A1A1A]">Impressed?</h3>
-              <p className="font-body text-[13px] text-[#9CA3AF] px-4 max-w-sm mx-auto leading-relaxed">
-                This AI receptionist can be customized for your business and deployed in days.
+              <h3 className="text-[22px] font-extrabold text-white">Impressed?</h3>
+              <p className="text-[13px] text-[#6B6B76] px-4 max-w-sm mx-auto leading-relaxed font-medium">
+                This AI receptionist can be fully customized for your business and deployed in days.
               </p>
             </div>
+
             <div className="flex flex-col sm:flex-row gap-3 justify-center px-4">
-              <button onClick={resetCall} className="flex-1 px-6 py-3.5 rounded-xl bg-[#0D9488] text-white font-body font-medium text-sm hover:bg-[#0F766E] transition-colors">
+              <button onClick={resetCall} className="flex-1 px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#2DD4BF] to-[#0D9488] text-[#07070A] font-bold text-[14px] hover:shadow-[0_0_30px_rgba(45,212,191,0.2)] transition-all">
                 Try Again
               </button>
-              <a href={`mailto:jon@onrise.ai?subject=${encodeURIComponent(`AI Receptionist for ${businessName || "My Business"}`)}&body=${encodeURIComponent(`Hi Jon,\n\nI just tried the AI receptionist demo for "${businessName || "my business"}" (${vertical || "general"} vertical) and I'm interested in getting this set up.\n\nCan we schedule a quick call to discuss?\n\nThanks!`)}`} className="flex-1 px-6 py-3.5 rounded-xl border border-[#0D9488] text-[#0D9488] font-body font-medium text-sm hover:bg-[#F0FDFA] transition-colors text-center">
+              <a
+                href={`mailto:jon@onrise.ai?subject=${encodeURIComponent(`AI Receptionist for ${businessName || "My Business"}`)}&body=${encodeURIComponent(`Hi Jon,\n\nI just tried the AI receptionist demo for "${businessName || "my business"}" (${vertical || "general"} vertical) and I'm interested in getting this set up.\n\nCan we schedule a quick call to discuss?\n\nThanks!`)}`}
+                className="flex-1 px-6 py-3.5 rounded-xl border border-[#2DD4BF]/30 text-[#2DD4BF] font-bold text-[14px] hover:bg-[#2DD4BF]/5 transition-all text-center"
+              >
                 Build This for Me
               </a>
             </div>
@@ -346,9 +352,9 @@ export default function CallWidget({ agentId, businessName, vertical, title, des
         )}
 
         {error && (
-          <div className="mt-6 px-5 py-4 rounded-xl bg-red-50 border border-red-200 text-center animate-shake">
-            <p className="font-body text-xs text-red-600">{error}</p>
-            <button onClick={resetCall} className="mt-2 text-xs text-[#0D9488] font-medium hover:underline">Try again</button>
+          <div className="mt-6 px-5 py-4 rounded-xl bg-red-500/10 border border-red-500/20 text-center animate-shake">
+            <p className="text-[12px] text-red-400 font-medium">{error}</p>
+            <button onClick={resetCall} className="mt-2 text-[12px] text-[#2DD4BF] font-bold hover:underline">Try again</button>
           </div>
         )}
       </div>
