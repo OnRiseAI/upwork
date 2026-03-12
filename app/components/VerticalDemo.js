@@ -108,46 +108,9 @@ const slideInRight = {
 export default function VerticalDemo({ verticalKey, nameParam }) {
   const vertical = getVertical(verticalKey);
   const [selectedSubVertical, setSelectedSubVertical] = useState(null);
-  const [activeLang, setActiveLang] = useState("primary"); // "primary" or "english"
-  const [transferContext, setTransferContext] = useState(null);
-
   const activeConfig = (vertical?.subVerticals && selectedSubVertical && vertical.subVerticals[selectedSubVertical])
     ? vertical.subVerticals[selectedSubVertical]
     : vertical;
-
-  const defaultName = nameParam || (activeConfig ? activeConfig.defaultName : "");
-  const [businessName, setBusinessName] = useState(defaultName);
-
-  const hasLanguageSwitch = !!vertical?.englishAgentId;
-  const activeAgentId = (hasLanguageSwitch && activeLang === "english")
-    ? vertical.englishAgentId
-    : getAgentId(verticalKey, selectedSubVertical);
-
-  // Extra variables to pass to English agent (context from Swedish call)
-  const extraVariables = (activeLang === "english" && transferContext)
-    ? transferContext
-    : {};
-
-  // Handle Swedish agent call ending — check if it was a language transfer
-  const handleCallEnded = (transcript) => {
-    if (!hasLanguageSwitch || activeLang !== "primary") return;
-    const lastAgentMessages = transcript.filter((t) => t.role === "agent").slice(-3);
-    const transferSignals = ["english", "transfer", "connect", "colleague", "kollega"];
-    const wasTransfer = lastAgentMessages.some((m) =>
-      transferSignals.some((s) => m.content.toLowerCase().includes(s))
-    );
-    if (wasTransfer) {
-      // Extract context from transcript
-      const userMessages = transcript.filter((t) => t.role === "user");
-      const fullUserText = userMessages.map((m) => m.content).join(" ");
-      setTransferContext({
-        caller_name: "", // Will be extracted by post-call analysis
-        caller_request: fullUserText.substring(0, 200),
-      });
-      // Auto-switch to English after a brief delay
-      setTimeout(() => setActiveLang("english"), 500);
-    }
-  };
 
   useEffect(() => {
     const name = nameParam || (activeConfig ? activeConfig.defaultName : "");
@@ -248,50 +211,6 @@ export default function VerticalDemo({ verticalKey, nameParam }) {
           <p className="text-[11px] text-[#44444D] font-medium">The AI adapts its greeting instantly</p>
         </motion.div>
 
-        {/* Language switcher (Swedish restaurant) */}
-        {hasLanguageSwitch && (
-          <motion.div variants={fadeUp} className="space-y-3">
-            <p className="text-[11px] font-bold text-[#2DD4BF]/60 tracking-[0.12em] uppercase">Active Language</p>
-            <div className="flex gap-2">
-              <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={() => { setActiveLang("primary"); setTransferContext(null); }}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-lg border text-[12px] font-semibold transition-colors duration-200 ${
-                  activeLang === "primary"
-                    ? "border-[#2DD4BF]/40 bg-[#2DD4BF]/10 text-[#2DD4BF]"
-                    : "border-[#1A1A1F] bg-[#0E0E12] text-[#6B6B76] hover:border-[#2DD4BF]/20 hover:text-[#2DD4BF]"
-                }`}
-              >
-                <span className="text-[14px]">🇸🇪</span>
-                Svenska
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={() => setActiveLang("english")}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-lg border text-[12px] font-semibold transition-colors duration-200 ${
-                  activeLang === "english"
-                    ? "border-[#2DD4BF]/40 bg-[#2DD4BF]/10 text-[#2DD4BF]"
-                    : "border-[#1A1A1F] bg-[#0E0E12] text-[#6B6B76] hover:border-[#2DD4BF]/20 hover:text-[#2DD4BF]"
-                }`}
-              >
-                <span className="text-[14px]">🇬🇧</span>
-                English
-              </motion.button>
-            </div>
-            {activeLang === "english" && transferContext && (
-              <motion.p
-                initial={{ opacity: 0, y: -5 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-[11px] text-[#2DD4BF]/60 font-medium"
-              >
-                Transferred from Swedish agent with context
-              </motion.p>
-            )}
-          </motion.div>
-        )}
-
         {/* Desktop: capabilities + questions */}
         <div className="hidden lg:block space-y-8 pt-2">
           <motion.div variants={fadeUp} className="space-y-3">
@@ -350,15 +269,12 @@ export default function VerticalDemo({ verticalKey, nameParam }) {
       {/* Call Widget */}
       <motion.div className="lg:col-span-7 lg:sticky lg:top-24" variants={slideInRight}>
         <CallWidget
-          key={activeLang}
-          agentId={activeAgentId}
+          agentId={getAgentId(verticalKey, selectedSubVertical)}
           businessName={businessName}
           vertical={verticalKey}
           title={businessName}
           description={activeConfig.description}
           sampleQuestions={activeConfig.sampleQuestions}
-          extraVariables={extraVariables}
-          onCallEnded={hasLanguageSwitch ? handleCallEnded : null}
         />
       </motion.div>
 

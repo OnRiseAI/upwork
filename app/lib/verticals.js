@@ -3,7 +3,7 @@ export const AGENT_MAP = {
   lawyer: "agent_4e98a56d42ed2aa6aa821814f5",
   "real-estate": "agent_58535a00d81ac43d7fb8613d8b",
   restaurant: "agent_fcb3e6dbaf8bf5456bc8504305",
-  "restaurant-se": "agent_f2d489311475f75e602c6fa985",
+  "restaurant-se": "agent_7d15a99c533345aae4638991bf",
   dental: "agent_04b53eed8f2b3a64b31dbc05a1",
   "vet-clinic": "agent_30309bfc50b917547222a5c737",
   "home-services": "agent_6f38941f6f866afe78bc87976e",
@@ -106,7 +106,6 @@ export const VERTICALS = {
       "I'd like to make a reservation (triggers English switch)",
       "Vilka öppettider har ni på lördag?",
     ],
-    englishAgentId: "agent_4b02c2688da76079b4b159627f",
   },
   dental: {
     label: "Dental Office",
