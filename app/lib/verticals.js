@@ -3,7 +3,7 @@ export const AGENT_MAP = {
   lawyer: "agent_4e98a56d42ed2aa6aa821814f5",
   "real-estate": "agent_58535a00d81ac43d7fb8613d8b",
   restaurant: "agent_fcb3e6dbaf8bf5456bc8504305",
-  "restaurant-se": "agent_7d15a99c533345aae4638991bf",
+  "restaurant-se": "agent_ed0c01cdcfcbe899d75a4a002d",
   dental: "agent_04b53eed8f2b3a64b31dbc05a1",
   "vet-clinic": "agent_30309bfc50b917547222a5c737",
   "home-services": "agent_6f38941f6f866afe78bc87976e",
@@ -11,7 +11,17 @@ export const AGENT_MAP = {
   insurance: "agent_7ec5e19151f16c68c758bd9053",
   "salon-spa": "agent_79f1e6dcdce17f549f9c298650",
   hotel: "agent_f9c3c17894de4765479bcc1a8b",
+  "home-services-qc": "agent_2bf41ae92b58d46ca1bf46c587", // Default: Adam
 };
+
+// Quebec Home Services voice options
+export const QC_VOICES = [
+  { name: "Adam", agentId: "agent_2bf41ae92b58d46ca1bf46c587", gender: "male" },
+  { name: "Alexandre", agentId: "agent_9326e05e54fe3a5bddb0446d15", gender: "male" },
+  { name: "Claudia", agentId: "agent_47dba26b0405bb7dfa813d5a56", gender: "female" },
+  { name: "Amélie", agentId: "agent_aab3d05c687175b70545d267e8", gender: "female" },
+  { name: "Thierry", agentId: "agent_900912b3dbd06680886b8ac3d7", gender: "male" },
+];
 
 // Sub-vertical agent IDs (Home Services sub-sectors get their own agents)
 export const SUB_AGENT_MAP = {
@@ -318,6 +328,25 @@ export const VERTICALS = {
       "How much is a deep tissue massage?",
       "I need to cancel my appointment tomorrow",
     ],
+  },
+  "home-services-qc": {
+    label: "Services à Domicile (Québec)",
+    icon: "wrench",
+    defaultName: "Services Pro Québec",
+    description: "Réceptionniste IA pour services à domicile — planifie les rendez-vous, gère les urgences, et prend les messages en français québécois.",
+    capabilities: [
+      "Planifier des rendez-vous de service",
+      "Gérer les appels d'urgence 24/7",
+      "Prendre les coordonnées des nouveaux clients",
+      "Répondre aux questions sur les services",
+    ],
+    sampleQuestions: [
+      "J'ai une fuite d'eau dans ma cuisine",
+      "Combien ça coûte pour changer un panneau électrique?",
+      "Mon chauffage ne fonctionne plus",
+      "Avez-vous de la disponibilité cette semaine?",
+    ],
+    hasVoicePicker: true,
   },
   hotel: {
     label: "Hotel & Hospitality",

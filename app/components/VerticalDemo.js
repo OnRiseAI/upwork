@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import CallWidget from "./CallWidget";
-import { VERTICALS, VERTICAL_KEYS, getVertical, getAgentId } from "../lib/verticals";
+import { VERTICALS, VERTICAL_KEYS, getVertical, getAgentId, QC_VOICES } from "../lib/verticals";
 
 // ─── Icons ───
 function CheckIcon({ className }) {
@@ -108,6 +108,7 @@ const slideInRight = {
 export default function VerticalDemo({ verticalKey, nameParam }) {
   const vertical = getVertical(verticalKey);
   const [selectedSubVertical, setSelectedSubVertical] = useState(null);
+  const [selectedVoice, setSelectedVoice] = useState(vertical?.hasVoicePicker ? QC_VOICES[0] : null);
   const activeConfig = (vertical?.subVerticals && selectedSubVertical && vertical.subVerticals[selectedSubVertical])
     ? vertical.subVerticals[selectedSubVertical]
     : vertical;
@@ -214,6 +215,41 @@ export default function VerticalDemo({ verticalKey, nameParam }) {
           <p className="text-[11px] text-[#44444D] font-medium">The AI adapts its greeting instantly</p>
         </motion.div>
 
+        {/* Voice picker for QC home services */}
+        {vertical.hasVoicePicker && (
+          <motion.div variants={fadeUp} className="space-y-3">
+            <p className="text-[11px] font-bold text-[#2DD4BF]/60 tracking-[0.12em] uppercase">Choose a voice</p>
+            <div className="grid grid-cols-5 gap-2">
+              {QC_VOICES.map((voice) => (
+                <motion.button
+                  key={voice.name}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setSelectedVoice(voice)}
+                  className={`flex flex-col items-center gap-2 p-3 rounded-xl border transition-all duration-200 ${
+                    selectedVoice?.name === voice.name
+                      ? "border-[#2DD4BF]/50 bg-[#2DD4BF]/10 shadow-[0_0_16px_rgba(45,212,191,0.15)]"
+                      : "border-[#1A1A1F] bg-[#0E0E12] hover:border-[#2DD4BF]/20"
+                  }`}
+                >
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-[16px] font-bold ${
+                    selectedVoice?.name === voice.name
+                      ? "bg-[#2DD4BF]/20 text-[#2DD4BF]"
+                      : "bg-[#1A1A1F] text-[#555]"
+                  }`}>
+                    {voice.gender === "female" ? "👩" : "👨"}
+                  </div>
+                  <span className={`text-[11px] font-semibold ${
+                    selectedVoice?.name === voice.name ? "text-[#2DD4BF]" : "text-[#6B6B76]"
+                  }`}>
+                    {voice.name}
+                  </span>
+                </motion.button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
         {/* Desktop: capabilities + questions */}
         <div className="hidden lg:block space-y-8 pt-2">
           <motion.div variants={fadeUp} className="space-y-3">
@@ -272,7 +308,7 @@ export default function VerticalDemo({ verticalKey, nameParam }) {
       {/* Call Widget */}
       <motion.div className="lg:col-span-7 lg:sticky lg:top-24" variants={slideInRight}>
         <CallWidget
-          agentId={getAgentId(verticalKey, selectedSubVertical)}
+          agentId={selectedVoice ? selectedVoice.agentId : getAgentId(verticalKey, selectedSubVertical)}
           businessName={businessName}
           vertical={verticalKey}
           title={businessName}
