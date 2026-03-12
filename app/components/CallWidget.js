@@ -345,17 +345,9 @@ export default function CallWidget({ agentId, businessName, vertical, title, des
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3 justify-center px-4">
-              <button onClick={resetCall} className="flex-1 px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#2DD4BF] to-[#0D9488] text-[#07070A] font-bold text-[14px] hover:shadow-[0_0_30px_rgba(45,212,191,0.2)] transition-all">
-                Try Again
-              </button>
-              <a
-                href={`mailto:jon@onrise.ai?subject=${encodeURIComponent(`AI Receptionist for ${businessName || "My Business"}`)}&body=${encodeURIComponent(`Hi Jon,\n\nI just tried the AI receptionist demo for "${businessName || "my business"}" (${vertical || "general"} vertical) and I'm interested in getting this set up.\n\nCan we schedule a quick call to discuss?\n\nThanks!`)}`}
-                className="flex-1 px-6 py-3.5 rounded-xl border border-[#2DD4BF]/30 text-[#2DD4BF] font-bold text-[14px] hover:bg-[#2DD4BF]/5 transition-all text-center"
-              >
-                Build This for Me
-              </a>
-            </div>
+            <button onClick={resetCall} className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#2DD4BF] to-[#0D9488] text-[#07070A] font-bold text-[14px] hover:shadow-[0_0_30px_rgba(45,212,191,0.2)] transition-all mx-auto">
+              Try Again
+            </button>
           </div>
         )}
 
