@@ -314,6 +314,7 @@ export default function VerticalDemo({ verticalKey, nameParam }) {
           title={businessName}
           description={activeConfig.description}
           sampleQuestions={activeConfig.sampleQuestions}
+          extraVariables={selectedVoice ? { agent_name: selectedVoice.name } : undefined}
         />
       </motion.div>
 
