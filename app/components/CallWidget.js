@@ -50,7 +50,7 @@ function CheckCircleIcon({ className }) {
   );
 }
 
-export default function CallWidget({ agentId, businessName, vertical, title, description, sampleQuestions = [] }) {
+export default function CallWidget({ agentId, businessName, vertical, title, description, sampleQuestions = [], extraVariables = {}, onCallEnded = null }) {
   const [callState, setCallState] = useState("idle");
   const [isAgentTalking, setIsAgentTalking] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
@@ -136,6 +136,7 @@ export default function CallWidget({ agentId, businessName, vertical, title, des
           agent_id: agentId,
           business_name: businessName,
           vertical: vertical,
+          extra_variables: extraVariables,
         }),
         signal: controller.signal,
       }).finally(() => clearTimeout(timeout));
@@ -149,6 +150,13 @@ export default function CallWidget({ agentId, businessName, vertical, title, des
         setIsAgentTalking(false);
         setIsMuted(false);
         retellClientRef.current = null;
+        if (onCallEnded) {
+          const currentTranscript = transcriptSignatureRef.current
+            .split("|")
+            .map((t) => { const [role, ...rest] = t.split(":"); return { role, content: rest.join(":") }; })
+            .filter((t) => t.content);
+          onCallEnded(currentTranscript);
+        }
       });
       client.on("agent_start_talking", () => setIsAgentTalking(true));
       client.on("agent_stop_talking", () => setIsAgentTalking(false));

@@ -28,6 +28,7 @@ export async function POST(request) {
 
     const businessName = typeof body.business_name === "string" ? body.business_name.trim() : "";
     const vertical = typeof body.vertical === "string" ? body.vertical.trim() : "";
+    const extraVars = typeof body.extra_variables === "object" && body.extra_variables ? body.extra_variables : {};
 
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), RETELL_REQUEST_TIMEOUT_MS);
@@ -50,6 +51,7 @@ export async function POST(request) {
           business_name: businessName || "Demo Business",
           vertical: vertical || "general",
           caller_source: "web_demo",
+          ...extraVars,
         },
       }),
     }).finally(() => clearTimeout(timeout));
