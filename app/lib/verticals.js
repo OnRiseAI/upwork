@@ -16,11 +16,11 @@ export const AGENT_MAP = {
 
 // Quebec Home Services voice options
 export const QC_VOICES = [
-  { name: "Adam", agentId: "agent_2bf41ae92b58d46ca1bf46c587", gender: "male" },
-  { name: "Alexandre", agentId: "agent_9326e05e54fe3a5bddb0446d15", gender: "male" },
-  { name: "Claudia", agentId: "agent_47dba26b0405bb7dfa813d5a56", gender: "female" },
-  { name: "Amélie", agentId: "agent_aab3d05c687175b70545d267e8", gender: "female" },
-  { name: "Thierry", agentId: "agent_900912b3dbd06680886b8ac3d7", gender: "male" },
+  { name: "Adam", agentId: "agent_2bf41ae92b58d46ca1bf46c587", gender: "male", photo: "/voices/adam.jpg" },
+  { name: "Alexandre", agentId: "agent_9326e05e54fe3a5bddb0446d15", gender: "male", photo: "/voices/alexandre.jpg" },
+  { name: "Claudia", agentId: "agent_47dba26b0405bb7dfa813d5a56", gender: "female", photo: "/voices/claudia.jpg" },
+  { name: "Amélie", agentId: "agent_aab3d05c687175b70545d267e8", gender: "female", photo: "/voices/amelie.jpg" },
+  { name: "Thierry", agentId: "agent_900912b3dbd06680886b8ac3d7", gender: "male", photo: "/voices/thierry.jpg" },
 ];
 
 // Sub-vertical agent IDs (Home Services sub-sectors get their own agents)

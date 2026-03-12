@@ -232,12 +232,12 @@ export default function VerticalDemo({ verticalKey, nameParam }) {
                       : "border-[#1A1A1F] bg-[#0E0E12] hover:border-[#2DD4BF]/20"
                   }`}
                 >
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-[16px] font-bold ${
+                  <div className={`w-12 h-12 rounded-full overflow-hidden border-2 transition-all duration-200 ${
                     selectedVoice?.name === voice.name
-                      ? "bg-[#2DD4BF]/20 text-[#2DD4BF]"
-                      : "bg-[#1A1A1F] text-[#555]"
+                      ? "border-[#2DD4BF] shadow-[0_0_12px_rgba(45,212,191,0.3)]"
+                      : "border-[#1A1A1F] grayscale opacity-60"
                   }`}>
-                    {voice.gender === "female" ? "👩" : "👨"}
+                    <img src={voice.photo} alt={voice.name} className="w-full h-full object-cover" />
                   </div>
                   <span className={`text-[11px] font-semibold ${
                     selectedVoice?.name === voice.name ? "text-[#2DD4BF]" : "text-[#6B6B76]"
